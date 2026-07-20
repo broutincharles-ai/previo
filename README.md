@@ -1,6 +1,6 @@
 # Prévio — MVP opérationnel local
 
-Prévio est un prototype fonctionnel d’assistance à la réalisation et au suivi du Document unique d’évaluation des risques professionnels (DUERP) pour les TPE et PME.
+Prévio est un prototype fonctionnel de prévention continue pour les TPE et PME. Il aide à évaluer les risques, décider quoi faire cette semaine, exécuter les actions, demander de l’aide au bon moment et démontrer la réduction du risque. Le DUERP devient la restitution réglementaire de cette démarche vivante.
 
 Cette version transforme la landing page initiale en un parcours produit complet. Elle fonctionne sans serveur pour permettre des tests utilisateurs immédiats. Elle ne doit pas être présentée comme un service de production tant que l’authentification, la base de données, l’archivage sécurisé et les contrats de traitement des données ne sont pas branchés.
 
@@ -26,6 +26,10 @@ L’ouverture directe de `index.html` fonctionne généralement aussi, mais cert
 - cotation explicable : gravité, exposition et maîtrise ;
 - registre des risques avec recherche, filtres, édition, validation et suppression ;
 - plan d’actions avec responsable, date, budget, ressources, indicateur, preuve et vérification de l’efficacité ;
+- espace « Cette semaine » avec capacité disponible, classement explicable et quatre files : immédiat, cette semaine, à planifier, avec un expert ;
+- workflow local d’assignation : action à accepter, acceptée ou bloquée, avec commentaire du responsable ;
+- moteur d’escalade déterministe produisant motif, délai, interlocuteur, mesure conservatoire et informations à préparer ;
+- boucle avant/après : référence initiale, indicateur, preuve, résultat, nouvelle cotation et date de réévaluation ;
 - journal des changements pouvant déclencher une mise à jour ;
 - participants et rôles simulés ;
 - revue finale avec contrôles bloquants ;
@@ -84,7 +88,7 @@ Le contrat de production proposé est décrit dans `ARCHITECTURE-PRODUCTION.md`.
 
 - validation syntaxique JavaScript avec `node --check` ;
 - chargement de l’application sans erreur JavaScript dans Chromium ;
-- navigation sur les sept espaces applicatifs ;
+- navigation sur les huit espaces applicatifs ;
 - ouverture et fermeture au clavier des modales publiques ;
 - création d’une unité et propagation dans l’évaluation et le formulaire d’action ;
 - tolérance à l’indisponibilité de `localStorage` ;
@@ -95,6 +99,7 @@ Le contrat de production proposé est décrit dans `ARCHITECTURE-PRODUCTION.md`.
 - pas de comptes ni de gestion multientreprise ;
 - pas de synchronisation serveur ni de travail collaboratif réel ;
 - pas d’envoi d’e-mail ;
+- acceptations, blocages et commentaires simulés localement : aucune notification réelle ;
 - pas de signature électronique ;
 - pas de stockage d’archives répondant à une politique de conservation longue ;
 - pas de génération IA distante ;

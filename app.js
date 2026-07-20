@@ -4,8 +4,8 @@
   const DATA = window.PREVIO_DATA;
   if (!DATA) throw new Error('PREVIO_DATA est indisponible. Vérifiez le chargement de data.js.');
 
-  const STORAGE_KEY = 'previo-mvp-operationnel-v5';
-  const SCHEMA_VERSION = 5;
+  const STORAGE_KEY = 'previo-mvp-operationnel-v6';
+  const SCHEMA_VERSION = 6;
   const CONTROL_FACTORS = { 1: 0.5, 2: 0.75, 3: 1, 4: 1.25 };
   const ACTION_STATUSES = ['À étudier', 'Décidée', 'Planifiée', 'Mise en œuvre', 'Efficacité à vérifier', 'Vérifiée efficace', 'À revoir'];
   const DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -186,7 +186,7 @@
       ],
       versions: [],
       review: { employeesInvolved: false, cseConsulted: false, spstShared: false, employerDeclaration: false, author: 'Camille Martin', lastValidatedAt: null },
-      ui: { onboardingCompleted: false, activeUnitId: units[1].id, questionIndexByUnit: {}, lastView: 'dashboard' },
+      ui: { onboardingCompleted: false, activeUnitId: units[1].id, questionIndexByUnit: {}, lastView: 'dashboard', weeklyCapacity: 120 },
       audit: [{ id: uid('audit'), at: nowISO(), type: 'initialization', message: 'Démonstration initialisée.' }]
     };
 
@@ -224,7 +224,9 @@
       base.actions.push({
         id: `action-seed-${index + 1}`, riskId: risk.id, unitId: risk.unitId, title: row[1], objective: row[2], description: row[3],
         priority: row[4], status: row[5], owner: row[6], deadline: row[7], budget: row[8], resource: row[9], indicator: row[10],
-        evidence: '', effectiveness: 'not-checked', verifiedAt: '', createdAt: nowISO(), updatedAt: nowISO()
+        evidence: '', effectiveness: 'not-checked', verifiedAt: '', effortMinutes: [120, 60, 90, 120][index], kind: 'auto', dependencies: '',
+        assignmentStatus: index < 2 ? 'accepted' : 'pending', blocker: '', baseline: index === 0 ? 'Sacs de 25 kg, 42 manipulations par jour, distance de portage 18 mètres — observation du 12/07/2026.' : '',
+        afterMeasure: '', postSeverity: '', postFrequency: '', postControl: '', reassessAt: '', createdAt: nowISO(), updatedAt: nowISO()
       });
     });
     base.risks.slice(0, 7).forEach(risk => { risk.validation = 'validated'; });
@@ -258,7 +260,10 @@
     normalized.assessments = raw.assessments && typeof raw.assessments === 'object' ? raw.assessments : {};
     normalized.units.forEach(unit => assessmentForState(normalized, unit.id));
     normalized.risks = Array.isArray(raw.risks) ? raw.risks : fallback.risks;
-    normalized.actions = Array.isArray(raw.actions) ? raw.actions : fallback.actions;
+    normalized.actions = (Array.isArray(raw.actions) ? raw.actions : fallback.actions).map(action => Object.assign({
+      effortMinutes: 60, kind: 'auto', dependencies: '', assignmentStatus: 'pending', blocker: '', baseline: '', afterMeasure: '',
+      postSeverity: '', postFrequency: '', postControl: '', reassessAt: ''
+    }, action));
     normalized.collaborators = Array.isArray(raw.collaborators) ? raw.collaborators : fallback.collaborators;
     normalized.events = Array.isArray(raw.events) ? raw.events : fallback.events;
     normalized.versions = Array.isArray(raw.versions) ? raw.versions : fallback.versions;
@@ -362,6 +367,45 @@
     });
   }
 
+  function daysUntil(value) {
+    if (!value) return 999;
+    return Math.ceil((new Date(`${value}T12:00:00`) - new Date(`${todayISO()}T12:00:00`)) / 86400000);
+  }
+
+  function escalationForRisk(risk) {
+    if (!risk?.specialist) return null;
+    const text = `${risk.title} ${risk.danger} ${risk.specialist}`.toLowerCase();
+    let contact = state.company.spst && !state.company.spst.toLowerCase().includes('renseigner') ? state.company.spst : 'SPST ou préventeur compétent';
+    let deadline = 'Sous 15 jours';
+    let precaution = 'Limiter l’exposition et documenter la situation jusqu’à clarification.';
+    let prepare = 'Situation observée, personnes exposées, fréquence, mesures existantes et photos utiles.';
+    if (/machine|électri|hauteur/.test(text)) { contact = 'Préventeur, organisme de contrôle ou fournisseur'; deadline = 'Avant toute nouvelle utilisation'; precaution = 'Mettre l’équipement concerné hors service ou sécuriser l’accès.'; prepare = 'Référence machine, notice, modifications, photos et dernière vérification.'; }
+    if (/cmr|chimique|amiante|poussière/.test(text)) { contact = 'SPST ou préventeur risque chimique'; precaution = 'Suspendre le produit si possible ou réduire strictement l’exposition.'; prepare = 'FDS, quantités, fréquence, ventilation et postes exposés.'; }
+    if (/souffrance|violence|harcèlement/.test(text)) { contact = 'SPST et acteurs internes compétents'; deadline = 'Sans attendre'; precaution = 'Protéger les personnes et traiter la situation hors de l’outil.'; prepare = 'Faits professionnels datés, organisation et mesures de protection, sans donnée médicale inutile.'; }
+    return { risk, contact, deadline, precaution, prepare, reason: risk.specialist };
+  }
+
+  function actionDecision(action) {
+    const risk = riskById(action.riskId);
+    const effort = Math.max(5, Number(action.effortMinutes) || 60);
+    const days = daysUntil(action.deadline);
+    const specialist = escalationForRisk(risk);
+    const score = (riskLevel(risk) === 'high' ? 60 : riskLevel(risk) === 'mid' ? 35 : 15) + (action.priority === 'high' ? 25 : action.priority === 'mid' ? 12 : 0) + (days < 0 ? 35 : days <= 7 ? 24 : days <= 30 ? 10 : 0) + (effort <= 30 ? 18 : effort <= 120 ? 10 : 0) - (Number(action.budget) > 1000 ? 8 : 0);
+    let lane = action.kind;
+    if (lane === 'auto') lane = specialist ? 'expert' : action.dependencies || action.assignmentStatus === 'blocked' ? 'plan' : riskLevel(risk) === 'high' && /retirer|suspendre|interdire|consign/.test(`${action.title} ${action.description}`.toLowerCase()) ? 'immediate' : days <= 7 || score >= 62 ? 'week' : 'plan';
+    return { action, risk, effort, days, specialist, score, lane };
+  }
+
+  function weeklyPlan(capacity = Number(state.ui.weeklyCapacity) || 120) {
+    const decisions = state.actions.filter(action => action.status !== 'Vérifiée efficace').map(actionDecision).sort((a, b) => b.score - a.score);
+    let remaining = capacity;
+    decisions.forEach(item => {
+      item.selected = item.lane === 'immediate' || (item.lane === 'week' && item.effort <= remaining);
+      if (item.selected && item.lane === 'week') remaining -= item.effort;
+    });
+    return { decisions, capacity, used: capacity - remaining };
+  }
+
   function nextUnitToAssess() {
     return state.units.find(unit => !unitProgress(unit).complete) || state.units[0];
   }
@@ -387,6 +431,7 @@
   function renderAll() {
     renderTopbar();
     renderDashboard();
+    renderWeekly();
     renderCompany();
     renderEvaluation();
     renderQuiz();
@@ -446,6 +491,53 @@
     $('#dashboard-events').querySelectorAll('[data-event-status]').forEach(button => button.addEventListener('click', () => advanceEvent(button.dataset.eventStatus)));
     $('#dashboard-priorities').querySelectorAll('[data-create-action-risk]').forEach(button => button.addEventListener('click', () => openActionModal('', button.dataset.createActionRisk)));
     $('#dashboard-actions').querySelectorAll('[data-edit-action]').forEach(button => button.addEventListener('click', () => openActionModal(button.dataset.editAction)));
+  }
+
+  function renderWeekly() {
+    const capacity = Number(state.ui.weeklyCapacity) || 120;
+    const plan = weeklyPlan(capacity);
+    const selected = plan.decisions.filter(item => item.selected);
+    const minutesLabel = value => value >= 60 ? `${Math.floor(value / 60)} h${value % 60 ? ` ${value % 60} min` : ''}` : `${value} min`;
+    $('#weekly-capacity').value = String(capacity);
+    $('#weekly-summary').innerHTML = `<article class="weekly-focus"><div><p class="eyebrow">Votre cap</p><h2>${selected.length ? `${selected.length} action${selected.length > 1 ? 's' : ''} à engager` : 'Aucune action sélectionnée'}</h2><p>${minutesLabel(plan.used)} mobilisées sur ${minutesLabel(capacity)} disponibles. Les mesures immédiates restent affichées hors capacité.</p></div><div class="weekly-meter"><i style="width:${Math.min(100, Math.round(plan.used / capacity * 100))}%"></i></div></article>`;
+
+    const lanes = [
+      ['immediate', 'À faire immédiatement', 'Mesures conservatoires à prendre sans attendre.'],
+      ['week', 'À faire cette semaine', 'Le meilleur impact possible dans le temps disponible.'],
+      ['plan', 'À planifier', 'Actions à arbitrer, dépendantes ou trop longues pour cette semaine.'],
+      ['expert', 'À faire avec un expert', 'Actions qui nécessitent un avis ou une compétence extérieure.']
+    ];
+    $('#weekly-lanes').innerHTML = lanes.map(([key, title, help]) => {
+      let items = plan.decisions.filter(item => item.lane === key);
+      if (key === 'week') items = items.filter(item => item.selected).concat(plan.decisions.filter(item => item.lane === key && !item.selected));
+      return `<section class="card weekly-lane"><div class="card-top"><div><h2>${title}</h2><p class="sub">${help}</p></div><span class="mini-tag">${items.length}</span></div><div class="stack">${items.length ? items.map(item => {
+        const action = item.action;
+        const muted = key === 'week' && !item.selected;
+        return `<article class="weekly-action ${muted ? 'not-selected' : ''}"><div class="weekly-action-top"><span class="badge badge-${action.priority === 'high' ? 'high' : action.priority === 'mid' ? 'mid' : 'low'}">${action.priority === 'high' ? 'Haute' : action.priority === 'mid' ? 'Modérée' : 'Amélioration'}</span><span class="mini-tag">${minutesLabel(item.effort)}</span><span class="assignment-state ${action.assignmentStatus || 'pending'}">${action.assignmentStatus === 'accepted' ? '✓ Acceptée' : action.assignmentStatus === 'blocked' ? '! Bloquée' : 'À accepter'}</span></div><h3>${escapeHTML(action.title)}</h3><p>${escapeHTML(action.owner || 'Responsable à attribuer')} · ${escapeHTML(formatDate(action.deadline))}${action.dependencies ? ` · Prérequis : ${escapeHTML(action.dependencies)}` : ''}</p>${muted ? '<small class="capacity-note">Hors capacité cette semaine</small>' : ''}<div class="weekly-action-buttons"><button class="row-button" data-weekly-accept="${escapeHTML(action.id)}">${action.assignmentStatus === 'accepted' ? 'Signaler un blocage' : 'Accepter'}</button><button class="row-button" data-edit-action="${escapeHTML(action.id)}">Ouvrir la fiche</button></div></article>`;
+      }).join('') : '<div class="empty-state">Aucune action dans cette catégorie.</div>'}</div></section>`;
+    }).join('');
+
+    const escalations = state.risks.map(escalationForRisk).filter(Boolean);
+    $('#escalation-count').textContent = String(escalations.length);
+    $('#weekly-escalations').innerHTML = escalations.length ? escalations.map(item => `<article class="escalation-item"><span class="mini-tag">${escapeHTML(item.deadline)}</span><h3>${escapeHTML(item.risk.title)}</h3><p><strong>Pourquoi :</strong> ${escapeHTML(item.reason)}</p><p><strong>Interlocuteur :</strong> ${escapeHTML(item.contact)}</p><p><strong>Mesure conservatoire :</strong> ${escapeHTML(item.precaution)}</p><details><summary>Informations à préparer</summary><p>${escapeHTML(item.prepare)}</p></details><button class="row-button" data-create-expert-action="${escapeHTML(item.risk.id)}">Créer l’action d’escalade</button></article>`).join('') : '<div class="empty-state">Aucun avis extérieur déclenché par les risques actuels.</div>';
+
+    $('#weekly-lanes').querySelectorAll('[data-edit-action]').forEach(button => button.addEventListener('click', () => openActionModal(button.dataset.editAction)));
+    $('#weekly-lanes').querySelectorAll('[data-weekly-accept]').forEach(button => button.addEventListener('click', () => {
+      const action = actionById(button.dataset.weeklyAccept);
+      action.assignmentStatus = action.assignmentStatus === 'accepted' ? 'blocked' : 'accepted';
+      action.blocker = action.assignmentStatus === 'blocked' && !action.blocker ? 'Blocage à préciser dans la fiche.' : action.blocker;
+      action.updatedAt = nowISO();
+      saveState(action.assignmentStatus === 'accepted' ? 'Action acceptée par le responsable.' : 'Blocage signalé sur l’action.', 'assignment');
+      renderAll();
+    }));
+    $('#weekly-escalations').querySelectorAll('[data-create-expert-action]').forEach(button => button.addEventListener('click', () => {
+      openActionModal('', button.dataset.createExpertAction);
+      $('#action-kind').value = 'expert';
+      const escalation = escalationForRisk(riskById(button.dataset.createExpertAction));
+      $('#action-title').value = `Solliciter un avis extérieur : ${escalation.risk.title}`;
+      $('#action-description').value = `${escalation.precaution} Préparer : ${escalation.prepare}`;
+      $('#action-resource').value = escalation.contact;
+    }));
   }
 
   function renderCompany() {
@@ -624,7 +716,9 @@
       const risk = riskById(action.riskId);
       const unit = unitById(action.unitId);
       const completeAction = action.status === 'Vérifiée efficace';
-      return `<article class="action-item" data-action-id="${escapeHTML(action.id)}"><button class="action-check ${completeAction ? 'complete' : ''}" data-toggle-action title="${completeAction ? 'Rouvrir' : 'Marquer comme mise en œuvre'}">✓</button><div><div class="risk-card-head"><span class="badge badge-${action.priority === 'high' ? 'high' : action.priority === 'mid' ? 'mid' : 'low'}">${escapeHTML(action.priority === 'high' ? 'Haute' : action.priority === 'mid' ? 'Modérée' : 'Amélioration')}</span><h3>${escapeHTML(action.title)}</h3></div><p>${escapeHTML(action.description || action.objective || 'Conditions d’exécution à préciser.')}</p><div class="action-details"><span>${escapeHTML(unit?.name || 'Sans unité')}</span><span>${escapeHTML(action.owner || 'Responsable à attribuer')}</span><span>Échéance ${escapeHTML(formatDate(action.deadline))}</span><span>${Number(action.budget || 0).toLocaleString('fr-FR')} €</span>${risk ? `<span>Risque : ${escapeHTML(risk.title)}</span>` : ''}</div></div><div class="action-side"><select data-inline-action-status aria-label="Statut">${ACTION_STATUSES.map(status => `<option ${status === action.status ? 'selected' : ''}>${escapeHTML(status)}</option>`).join('')}</select><input type="date" data-inline-action-date value="${escapeHTML(action.deadline || '')}" aria-label="Échéance"><button class="row-button" data-edit-action="${escapeHTML(action.id)}">Modifier la fiche</button></div></article>`;
+      const beforeScore = risk ? calculateScore(risk.severity, risk.frequency, risk.control).residual : null;
+      const afterScore = action.postSeverity && action.postFrequency && action.postControl ? calculateScore(action.postSeverity, action.postFrequency, action.postControl).residual : null;
+      return `<article class="action-item" data-action-id="${escapeHTML(action.id)}"><button class="action-check ${completeAction ? 'complete' : ''}" data-toggle-action title="${completeAction ? 'Rouvrir' : 'Marquer comme mise en œuvre'}">✓</button><div><div class="risk-card-head"><span class="badge badge-${action.priority === 'high' ? 'high' : action.priority === 'mid' ? 'mid' : 'low'}">${escapeHTML(action.priority === 'high' ? 'Haute' : action.priority === 'mid' ? 'Modérée' : 'Amélioration')}</span><h3>${escapeHTML(action.title)}</h3><span class="assignment-state ${action.assignmentStatus || 'pending'}">${action.assignmentStatus === 'accepted' ? '✓ Acceptée' : action.assignmentStatus === 'blocked' ? '! Bloquée' : 'À accepter'}</span></div><p>${escapeHTML(action.description || action.objective || 'Conditions d’exécution à préciser.')}</p><div class="action-details"><span>${escapeHTML(unit?.name || 'Sans unité')}</span><span>${escapeHTML(action.owner || 'Responsable à attribuer')}</span><span>Échéance ${escapeHTML(formatDate(action.deadline))}</span><span>${Number(action.effortMinutes || 60)} min</span>${risk ? `<span>Risque : ${escapeHTML(risk.title)}</span>` : ''}</div>${action.baseline || action.afterMeasure ? `<div class="before-after"><div><small>Avant</small><strong>${beforeScore ?? '—'}</strong><p>${escapeHTML(action.baseline || 'Référence à documenter')}</p></div><span>→</span><div><small>Après</small><strong>${afterScore ?? '—'}</strong><p>${escapeHTML(action.afterMeasure || 'Mesure à réaliser')}</p></div></div>` : ''}</div><div class="action-side"><select data-inline-action-status aria-label="Statut">${ACTION_STATUSES.map(status => `<option ${status === action.status ? 'selected' : ''}>${escapeHTML(status)}</option>`).join('')}</select><input type="date" data-inline-action-date value="${escapeHTML(action.deadline || '')}" aria-label="Échéance"><button class="row-button" data-edit-action="${escapeHTML(action.id)}">Modifier la fiche</button></div></article>`;
     }).join('') : '<div class="empty-state">Aucune action ne correspond aux filtres.</div>';
 
     $('#action-list').querySelectorAll('[data-edit-action]').forEach(button => button.addEventListener('click', () => openActionModal(button.dataset.editAction)));
@@ -638,6 +732,7 @@
     const uncertain = state.risks.filter(risk => risk.confidence === 'low');
     const highMissing = highRisksWithoutAction();
     const incompleteActions = state.actions.filter(action => !action.owner || !action.deadline);
+    const unprovenActions = state.actions.filter(action => action.status === 'Vérifiée efficace' && (!action.baseline || !action.indicator || !action.evidence || !action.afterMeasure || !action.postSeverity || !action.postFrequency || !action.postControl || !action.verifiedAt));
     const papripactIncomplete = Number(state.company.employees) >= 50 ? state.actions.filter(action => !action.indicator || action.budget === '' || action.budget === null || !action.resource) : [];
     const checks = [
       { id: 'company', severity: state.company.name && Number(state.company.employees) > 0 ? 'ok' : 'block', title: 'Identité et effectif de l’établissement', detail: state.company.name && Number(state.company.employees) > 0 ? 'Informations principales renseignées.' : 'Renseignez la raison sociale et l’effectif.' },
@@ -647,6 +742,7 @@
       { id: 'validation', severity: unvalidated.length ? 'block' : 'ok', title: 'Validation humaine des risques', detail: unvalidated.length ? `${unvalidated.length} risque${unvalidated.length > 1 ? 's' : ''} à relire et valider.` : 'Toutes les fiches de risque sont validées.' },
       { id: 'high-actions', severity: highMissing.length ? 'block' : 'ok', title: 'Risques élevés couverts par une action', detail: highMissing.length ? `${highMissing.length} risque${highMissing.length > 1 ? 's élevés restent' : ' élevé reste'} sans action suffisante.` : 'Chaque risque élevé est associé à une action.' },
       { id: 'action-fields', severity: incompleteActions.length ? 'block' : 'ok', title: 'Responsables et échéances', detail: incompleteActions.length ? `${incompleteActions.length} action${incompleteActions.length > 1 ? 's sont' : ' est'} incomplète${incompleteActions.length > 1 ? 's' : ''}.` : 'Toutes les actions ont un responsable et une échéance.' },
+      { id: 'action-proof', severity: unprovenActions.length ? 'block' : 'ok', title: 'Preuve de réduction du risque', detail: unprovenActions.length ? `${unprovenActions.length} action${unprovenActions.length > 1 ? 's sont déclarées' : ' est déclarée'} efficace${unprovenActions.length > 1 ? 's' : ''} sans comparaison avant/après complète.` : 'Aucune efficacité n’est déclarée sans preuve structurée.' },
       { id: 'papripact', severity: papripactIncomplete.length ? 'block' : 'ok', title: Number(state.company.employees) >= 50 ? 'Contenu du PAPRIPACT' : 'Liste d’actions adaptée à l’effectif', detail: papripactIncomplete.length ? `${papripactIncomplete.length} action${papripactIncomplete.length > 1 ? 's nécessitent' : ' nécessite'} budget, ressource et indicateur.` : Number(state.company.employees) >= 50 ? 'Les actions comportent les champs structurants du programme annuel.' : 'La liste d’actions est intégrée à la démarche.' },
       { id: 'employees', severity: state.review.employeesInvolved ? 'ok' : 'block', title: 'Participation des salariés', detail: state.review.employeesInvolved ? 'Participation déclarée.' : 'Confirmez l’association ou le recueil des observations des salariés.' },
       { id: 'cse', severity: state.company.cse !== 'yes' || state.review.cseConsulted ? 'ok' : 'block', title: 'Association du CSE', detail: state.company.cse !== 'yes' ? 'Aucun CSE déclaré dans cet établissement.' : state.review.cseConsulted ? 'Consultation déclarée.' : 'Confirmez l’association et la consultation du CSE.' },
@@ -993,15 +1089,26 @@
     $('#action-objective').value = action?.objective || (risk ? `Réduire la criticité du risque « ${risk.title} »` : '');
     $('#action-description').value = action?.description || (risk?.prevention ? risk.prevention.split('\n')[0] : '');
     $('#action-priority').value = action?.priority || (risk && riskLevel(risk) === 'high' ? 'high' : 'mid');
+    $('#action-kind').value = action?.kind || 'auto';
+    $('#action-effort').value = action?.effortMinutes || 60;
+    $('#action-dependencies').value = action?.dependencies || '';
     $('#action-status').value = action?.status || 'À étudier';
     $('#action-owner').value = action?.owner || '';
+    $('#action-assignment').value = action?.assignmentStatus || 'pending';
+    $('#action-blocker').value = action?.blocker || '';
     $('#action-deadline').value = action?.deadline || '';
     $('#action-budget').value = action?.budget ?? '';
     $('#action-resource').value = action?.resource || '';
     $('#action-indicator').value = action?.indicator || '';
+    $('#action-baseline').value = action?.baseline || (risk ? `${risk.situation} Cotation initiale : ${calculateScore(risk.severity, risk.frequency, risk.control).residual}.` : '');
     $('#action-evidence').value = action?.evidence || '';
+    $('#action-after-measure').value = action?.afterMeasure || '';
+    $('#action-post-severity').value = action?.postSeverity || '';
+    $('#action-post-frequency').value = action?.postFrequency || '';
+    $('#action-post-control').value = action?.postControl || '';
     $('#action-effectiveness').value = action?.effectiveness || 'not-checked';
     $('#action-verified-at').value = action?.verifiedAt || '';
+    $('#action-reassess-at').value = action?.reassessAt || '';
     $('#delete-action').hidden = !action;
     openModal('action');
   }
@@ -1012,10 +1119,14 @@
     const existingIndex = state.actions.findIndex(action => action.id === id);
     const action = {
       id, riskId: $('#action-risk').value, unitId: $('#action-unit').value, title: $('#action-title').value.trim(), objective: $('#action-objective').value.trim(),
-      description: $('#action-description').value.trim(), priority: $('#action-priority').value, status: $('#action-status').value, owner: $('#action-owner').value.trim(),
+      description: $('#action-description').value.trim(), priority: $('#action-priority').value, kind: $('#action-kind').value,
+      effortMinutes: Math.max(5, Number($('#action-effort').value) || 60), dependencies: $('#action-dependencies').value.trim(), status: $('#action-status').value, owner: $('#action-owner').value.trim(),
+      assignmentStatus: $('#action-assignment').value, blocker: $('#action-blocker').value.trim(),
       deadline: $('#action-deadline').value, budget: $('#action-budget').value === '' ? '' : Number($('#action-budget').value), resource: $('#action-resource').value.trim(),
-      indicator: $('#action-indicator').value.trim(), evidence: $('#action-evidence').value.trim(), effectiveness: $('#action-effectiveness').value,
-      verifiedAt: $('#action-verified-at').value, createdAt: existingIndex >= 0 ? state.actions[existingIndex].createdAt : nowISO(), updatedAt: nowISO()
+      baseline: $('#action-baseline').value.trim(), indicator: $('#action-indicator').value.trim(), evidence: $('#action-evidence').value.trim(), afterMeasure: $('#action-after-measure').value.trim(),
+      postSeverity: $('#action-post-severity').value, postFrequency: $('#action-post-frequency').value, postControl: $('#action-post-control').value,
+      effectiveness: $('#action-effectiveness').value, verifiedAt: $('#action-verified-at').value, reassessAt: $('#action-reassess-at').value,
+      createdAt: existingIndex >= 0 ? state.actions[existingIndex].createdAt : nowISO(), updatedAt: nowISO()
     };
     if (existingIndex >= 0) state.actions[existingIndex] = action; else state.actions.push(action);
     saveState(existingIndex >= 0 ? 'Action mise à jour.' : 'Action ajoutée au plan.', 'action');
@@ -1102,8 +1213,8 @@
   }
 
   function actionsCSV() {
-    const rows = [['Action', 'Risque', 'Unité', 'Objectif', 'Conditions d’exécution', 'Priorité', 'Responsable', 'Échéance', 'Budget', 'Ressource', 'Indicateur', 'Statut', 'Preuve', 'Efficacité']];
-    state.actions.forEach(action => rows.push([action.title, riskById(action.riskId)?.title || '', unitById(action.unitId)?.name || '', action.objective, action.description, action.priority, action.owner, action.deadline, action.budget, action.resource, action.indicator, action.status, action.evidence, action.effectiveness]));
+    const rows = [['Action', 'Risque', 'Unité', 'Objectif', 'Conditions d’exécution', 'Priorité', 'Mode', 'Effort (min)', 'Dépendances', 'Responsable', 'Acceptation', 'Blocage', 'Échéance', 'Budget', 'Ressource', 'Situation avant', 'Indicateur', 'Preuve', 'Résultat après', 'Nouvelle gravité', 'Nouvelle exposition', 'Nouvelle maîtrise', 'Statut', 'Efficacité', 'Vérifié le', 'Prochaine réévaluation']];
+    state.actions.forEach(action => rows.push([action.title, riskById(action.riskId)?.title || '', unitById(action.unitId)?.name || '', action.objective, action.description, action.priority, action.kind, action.effortMinutes, action.dependencies, action.owner, action.assignmentStatus, action.blocker, action.deadline, action.budget, action.resource, action.baseline, action.indicator, action.evidence, action.afterMeasure, action.postSeverity, action.postFrequency, action.postControl, action.status, action.effectiveness, action.verifiedAt, action.reassessAt]));
     return rowsToCSV(rows);
   }
 
@@ -1301,6 +1412,11 @@
     $('#action-search').addEventListener('input', event => { actionFilters.search = event.target.value.trim(); renderActions(); });
     $('#action-status-filter').addEventListener('change', event => { actionFilters.status = event.target.value; renderActions(); });
     $('#action-priority-filter').addEventListener('change', event => { actionFilters.priority = event.target.value; renderActions(); });
+    $('#weekly-capacity').addEventListener('change', event => {
+      state.ui.weeklyCapacity = Number(event.target.value) || 120;
+      saveState('Capacité hebdomadaire mise à jour.', 'planning');
+      renderWeekly();
+    });
 
     $('#action-list').addEventListener('change', event => {
       const item = event.target.closest('[data-action-id]');

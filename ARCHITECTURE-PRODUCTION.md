@@ -50,9 +50,18 @@ Ce document décrit le socle nécessaire pour transformer le MVP local en servic
 
 - risque et unité ;
 - mesure, priorité, responsable, date cible ;
-- budget, moyens, indicateur ;
-- preuve, statut, vérification de l’efficacité ;
+- budget, moyens, effort estimé, dépendances et capacité hebdomadaire ;
+- acceptation, blocage, commentaires et notifications ;
+- situation de référence, indicateur, preuve, mesure après action et nouvelle cotation ;
+- statut, conclusion d’efficacité et prochaine réévaluation ;
 - historique des changements.
+
+### Escalade
+
+- risque déclencheur et règle appliquée ;
+- urgence, interlocuteur recommandé et motif ;
+- mesure conservatoire et informations à préparer ;
+- action liée, prise en charge et clôture documentée.
 
 ### Version DUERP
 
