@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prévio — Assistant DUERP pour TPE et PME</title>
+<meta name="description" content="Prévio aide les TPE et PME à rédiger leur Document Unique d'Évaluation des Risques Professionnels, avec une analyse IA pour des conseils de prévention concrets.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Prévio — Votre DUERP, enfin simple">
+<meta property="og:description" content="Un assistant guidé pour identifier les risques, construire un plan de prévention et éditer le DUERP des TPE et PME.">
+<meta property="og:image" content="og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prévio — Votre DUERP, enfin simple">
+<meta name="twitter:description" content="Évaluez les risques professionnels et construisez un plan de prévention concret, sans partir d'une page blanche.">
+<meta name="twitter:image" content="og-preview.png">
+<meta name="plausible-domain" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu principal</a>
+
+<!-- ======================================================
+     VUE 1 — SITE VITRINE
+     ====================================================== -->
+<div class="view is-active" id="view-home">
+
+<header class="site-nav">
+  <div class="inner">
+    <a href="#" class="brand" data-goto="home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+      </span>
+      Prévio
+    </a>
+    <nav class="links" id="nav-links" aria-label="Navigation principale">
+      <a href="#fonctionnement">Fonctionnement</a>
+      <a href="#benefices">Bénéfices</a>
+      <a href="#confiance">IA &amp; données</a>
+      <a href="#" data-goto="dashboard">Voir la démo</a>
+      <a href="#" class="btn btn-primary btn-sm" data-goto="onboarding">Commencer mon DUERP</a>
+    </nav>
+    <button class="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false" id="burger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="inner">
+    <div>
+      <p class="eyebrow">Document unique · TPE &amp; PME</p>
+      <h1>Votre DUERP, <span class="u">enfin simple</span>.</h1>
+      <p class="lead">Répondez à un questionnaire guidé sur votre activité. Prévio identifie les risques à examiner, vous aide à les hiérarchiser et construit un plan de prévention concret dans un document structuré, prêt à relire, valider et présenter.</p>
+      <div class="cta-row">
+        <a href="#" class="btn btn-primary" data-goto="onboarding">Commencer mon DUERP <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="#fonctionnement" class="btn btn-ghost-dark">Comment ça marche</a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Environ 45 minutes</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sauvegarde automatique</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Données conservées dans votre navigateur</span>
+      </div>
+    </div>
+    <div>
+      <div class="docmock" aria-hidden="true">
+        <span class="ai-chip"><span class="pulse"></span>Analyse IA</span>
+        <div class="doc-head">
+          <div class="doc-title">Document unique<b>Boulangerie Martin · 6 salariés</b></div>
+        </div>
+        <div class="doc-row"><span class="risk-name">Manutention manuelle<small>Fournil · sacs de farine 25 kg</small></span><span class="cotation"><i></i></span><span class="badge badge-high"><span class="dot"></span>Élevé</span></div>
+        <div class="doc-row"><span class="risk-name">Chutes de plain-pied<small>Fournil · sols farinés</small></span><span class="cotation"><i></i></span><span class="badge badge-mid"><span class="dot"></span>Modéré</span></div>
+        <div class="doc-row"><span class="risk-name">Brûlures &amp; fours<small>Fournil · défournement</small></span><span class="cotation"><i></i></span><span class="badge badge-mid"><span class="dot"></span>Modéré</span></div>
+        <div class="doc-row"><span class="risk-name">Travail sur écran<small>Bureau · gestion</small></span><span class="cotation"><i></i></span><span class="badge badge-low"><span class="dot"></span>Maîtrisé</span></div>
+        <div class="doc-row"><span class="risk-name">Risque routier<small>Livraisons · trajets courts</small></span><span class="cotation"><i></i></span><span class="badge badge-low"><span class="dot"></span>Maîtrisé</span></div>
+        <div class="doc-foot">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+          Conseil de prévention proposé pour la manutention. Aide à la table élévatrice, formation gestes et postures.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="fonctionnement">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Fonctionnement</span>
+      <h2>Trois étapes, un document prêt à l'emploi</h2>
+      <p>Pas de jargon, pas de tableur vide à remplir seul. Vous décrivez votre activité, l'outil fait le travail de structuration.</p>
+    </div>
+    <div class="steps">
+      <article class="step-card reveal">
+        <p class="num">Étape 1</p>
+        <h3>Décrivez votre activité</h3>
+        <p>Secteur, effectif, postes de travail, équipements. Le questionnaire s'adapte à vos réponses et ne pose que les questions utiles à votre situation.</p>
+        <span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10 à 15 min</span>
+      </article>
+      <article class="step-card reveal">
+        <p class="num">Étape 2</p>
+        <h3>Évaluez vos risques, guidé pas à pas</h3>
+        <p>Pour chaque unité de travail, l'analyse IA vous suggère les risques typiques de votre métier. Vous confirmez, précisez ou écartez, avec des exemples concrets.</p>
+        <span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>20 à 30 min</span>
+      </article>
+      <article class="step-card reveal">
+        <p class="num">Étape 3</p>
+        <h3>Recevez votre DUERP et votre plan d'actions</h3>
+        <p>Un document structuré, hiérarchisé par priorité, avec des mesures de prévention concrètes et un export PDF prêt à présenter à vos salariés ou à l'inspection du travail.</p>
+        <span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Immédiat</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="benefices" style="background:#fff;border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Bénéfices</span>
+      <h2>Pensé pour les dirigeants, pas pour les juristes</h2>
+      <p>Le DUERP est obligatoire dès le premier salarié. Prévio le rend faisable en une après-midi, sans expertise préalable.</p>
+    </div>
+    <div class="benefits">
+      <article class="benefit reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <div>
+          <h3>Structuré selon les exigences du DUERP</h3>
+          <p>Structure alignée sur les exigences des articles L4121-3 et R4121-1 et suivants. Traçabilité des mises à jour et conservation des versions.</p>
+        </div>
+      </article>
+      <article class="benefit reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
+        <div>
+          <h3>Des conseils de prévention concrets</h3>
+          <p>L'analyse IA s'appuie sur les référentiels de prévention par métier et propose des mesures réalistes pour une petite structure, pas des généralités.</p>
+        </div>
+      </article>
+      <article class="benefit reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <div>
+          <h3>Rapide et sans page blanche</h3>
+          <p>Un parcours guidé question par question, avec sauvegarde automatique. Vous pouvez interrompre et reprendre à tout moment, rien n'est perdu.</p>
+        </div>
+      </article>
+      <article class="benefit reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>
+        <div>
+          <h3>Un suivi dans le temps</h3>
+          <p>Rappels de mise à jour annuelle, suivi de l'avancement du plan d'actions, historique des versions. Votre prévention vit au-delà du document.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="confiance">
+  <div class="wrap split">
+    <div class="reveal">
+      <div class="section-head" style="margin-bottom:0">
+        <span class="eyebrow">IA &amp; données</span>
+        <h2>Transparent sur ce que fait l'IA, et sur ce qu'elle ne fait pas</h2>
+      </div>
+      <ul class="check-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Une aide à la décision, pas un conseil juridique.</b> Les suggestions de l'IA sont des propositions que vous validez. Vous restez responsable de l'évaluation finale, comme le prévoit la réglementation.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Vos données restent les vôtres.</b> Hébergement en France, aucune revente, aucune utilisation de vos réponses pour entraîner des modèles. Suppression sur simple demande.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Des sources identifiées.</b> Les mesures de prévention proposées s'appuient sur les référentiels publics de prévention (INRS, branches professionnelles) et sont citées dans le document.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Vous gardez la main.</b> Chaque risque, chaque cotation et chaque mesure peut être modifié avant l'édition du document final.</span></li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="alert alert-info" role="note" style="flex-direction:column;gap:.6rem;padding:1.6rem">
+        <strong style="font-family:var(--font-display);font-size:1.05rem">Ce que dit la réglementation</strong>
+        <p>Le Document Unique d'Évaluation des Risques Professionnels est obligatoire pour tout employeur dès le premier salarié. Il doit être tenu à jour, notamment lors de tout aménagement important, et mis à jour au moins chaque année dans les entreprises d'au moins 11 salariés. Ses versions successives doivent être conservées pendant 40 ans.</p>
+        <p>Prévio structure votre démarche et vous fait gagner du temps, mais ne remplace ni votre connaissance du terrain, ni le dialogue avec vos salariés, ni l'appui de votre service de prévention et de santé au travail.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-final reveal">
+      <h2>Une après-midi pour structurer votre démarche et mieux protéger vos équipes</h2>
+      <p>Commencez gratuitement. Vous ne payez qu'au moment d'éditer votre document final.</p>
+      <a href="#" class="btn btn-primary" data-goto="onboarding">Commencer mon DUERP <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <a href="#" class="brand" data-goto="home" style="font-size:1.1rem"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>Prévio</a>
+        <p style="margin-top:.7rem;max-width:22rem">L'évaluation des risques professionnels, simple et guidée, pour les TPE et PME.</p>
+      </div>
+      <nav aria-label="Liens de bas de page">
+        <a href="#fonctionnement">Fonctionnement</a>
+        <a href="#confiance">IA &amp; données</a>
+        <a href="#" data-goto="dashboard">Démo</a>
+        <a href="#" data-modal="legal">Mentions légales</a>
+        <a href="#" data-modal="privacy">Confidentialité</a>
+        <a href="#" data-modal="contact">Contact</a>
+      </nav>
+    </div>
+    <p class="legal">Prévio est un outil d'aide à la rédaction et à la structuration du Document Unique d'Évaluation des Risques Professionnels. Les analyses et suggestions générées, y compris par intelligence artificielle, constituent une aide à la décision et ne se substituent ni à un conseil juridique, ni à l'évaluation des risques qui relève de la responsabilité de l'employeur (art. L4121-3 du Code du travail), ni à l'accompagnement de votre service de prévention et de santé au travail. © 2026 Prévio.</p>
+  </div>
+</footer>
+
+</div><!-- /view-home -->
+
+<!-- ======================================================
+     APPLICATION PRÉVIO — MVP opérationnel local
+     ====================================================== -->
+<div class="view" id="view-app">
+  <div class="app-shell">
+    <header class="app-topbar">
+      <div class="inner">
+        <a href="#" class="brand" data-goto="home" style="font-size:1.05rem">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          Prévio
+        </a>
+        <nav class="app-tabs" id="app-tabs" aria-label="Navigation de l’application">
+          <button class="app-tab" data-appview="dashboard">Tableau de bord</button>
+          <button class="app-tab" data-appview="company">Entreprise</button>
+          <button class="app-tab" data-appview="evaluation">Évaluation</button>
+          <button class="app-tab" data-appview="risks">Risques</button>
+          <button class="app-tab" data-appview="actions">Plan d’actions</button>
+          <button class="app-tab" data-appview="review">Revue finale</button>
+          <button class="app-tab" data-appview="versions">Versions &amp; suivi</button>
+        </nav>
+        <span class="save-state" role="status" id="save-state"><span class="save-dot"></span><span id="save-state-label">Enregistré localement</span></span>
+        <div class="app-actions">
+          <button class="icon-btn" aria-label="Aide" data-modal="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 114 1.7c-1.1.7-1.8 1.2-1.8 2.6M12 17h.01"/></svg></button>
+          <button class="icon-btn" aria-label="Paramètres et données" data-modal="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21h-4v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 00.3-1.9A1.7 1.7 0 003.1 14H3v-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 001.9.3A1.7 1.7 0 0010 3.1V3h4v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.5 1h.1v4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="tab-overflow-hint" id="tab-overflow-hint" aria-hidden="true">Faites défiler les onglets →</div>
+
+    <!-- ONBOARDING -->
+    <main class="app-main appview" id="app-onboarding" data-name="onboarding" hidden>
+      <div class="onboarding-shell">
+        <header class="onboarding-head">
+          <p class="eyebrow">Configuration guidée</p>
+          <h1>Construisons votre démarche de prévention</h1>
+          <p>Prévio structure les informations, suggère les points à vérifier et vous laisse valider chaque décision.</p>
+        </header>
+        <nav class="onboard-stepper" aria-label="Progression de la configuration">
+          <span class="onboard-step active" data-onboard-indicator="1"><i>1</i>Entreprise</span>
+          <span class="onboard-step" data-onboard-indicator="2"><i>2</i>Pilote</span>
+          <span class="onboard-step" data-onboard-indicator="3"><i>3</i>Unités</span>
+          <span class="onboard-step" data-onboard-indicator="4"><i>4</i>Cadre</span>
+        </nav>
+        <section class="onboard-card">
+          <div class="onboard-panel" data-onboard-panel="1">
+            <div class="onboard-title"><span class="ico">01</span><div><h2>Votre établissement</h2><p>Le secteur choisi charge un parcours métier que vous pourrez modifier.</p></div></div>
+            <div class="form-grid">
+              <div class="field"><label for="ob-company-name">Raison sociale *</label><input id="ob-company-name" autocomplete="organization" required></div>
+              <div class="field"><label for="ob-siret">SIRET</label><input id="ob-siret" inputmode="numeric" maxlength="14" pattern="[0-9]{14}" aria-describedby="ob-siret-error"><small class="field-error" id="ob-siret-error"></small></div>
+              <div class="field full"><label for="ob-sector">Secteur / pack métier *</label><select id="ob-sector"></select><small id="ob-sector-description" class="field-help"></small></div>
+              <div class="field"><label for="ob-employees">Nombre de salariés *</label><input id="ob-employees" type="number" min="1" max="249" required></div>
+              <div class="field"><label for="ob-naf">Code NAF</label><input id="ob-naf" placeholder="Ex. 1071C"></div>
+              <div class="field full"><label for="ob-address">Adresse de l’établissement</label><input id="ob-address" autocomplete="street-address"></div>
+            </div>
+          </div>
+          <div class="onboard-panel" data-onboard-panel="2" hidden>
+            <div class="onboard-title"><span class="ico">02</span><div><h2>Le pilote de la démarche</h2><p>Cette personne coordonne l’évaluation, les contributions et le plan d’actions.</p></div></div>
+            <div class="form-grid">
+              <div class="field"><label for="ob-contact-name">Nom et prénom *</label><input id="ob-contact-name" autocomplete="name" required></div>
+              <div class="field"><label for="ob-contact-role">Fonction</label><select id="ob-contact-role"><option>Dirigeant·e</option><option>Responsable RH</option><option>Référent·e prévention</option><option>Responsable d’établissement</option><option>Autre</option></select></div>
+              <div class="field"><label for="ob-email">E-mail *</label><input id="ob-email" type="email" autocomplete="email" required aria-describedby="ob-email-error"><small class="field-error" id="ob-email-error"></small></div>
+              <div class="field"><label for="ob-spst">Service de prévention et de santé au travail</label><input id="ob-spst"></div>
+              <div class="field"><label for="ob-cse">CSE dans l’établissement</label><select id="ob-cse"><option value="no">Non</option><option value="yes">Oui</option><option value="unknown">À vérifier</option></select></div>
+              <div class="field"><label for="ob-last-review">Date de la dernière évaluation</label><input id="ob-last-review" type="date"></div>
+            </div>
+          </div>
+          <div class="onboard-panel" data-onboard-panel="3" hidden>
+            <div class="onboard-title"><span class="ico">03</span><div><h2>Vos unités de travail</h2><p>Sélectionnez les groupes qui correspondent au travail réel. Les effectifs peuvent se chevaucher.</p></div></div>
+            <div class="unit-picks" id="onboard-unit-picks"></div>
+            <div class="hint"><span><strong>Repère.</strong> Une unité n’est pas forcément un service : elle regroupe des situations d’exposition homogènes.</span></div>
+          </div>
+          <div class="onboard-panel" data-onboard-panel="4" hidden>
+            <div class="onboard-title"><span class="ico">04</span><div><h2>Cadre de votre démarche</h2><p>Prévio assiste la structuration. Le terrain, le dialogue avec les salariés et la validation de l’employeur restent indispensables.</p></div></div>
+            <div class="summary-box" id="onboard-summary"></div>
+            <label class="declaration-box"><input id="ob-declaration" type="checkbox"><span>Je comprends que l’outil propose une aide à la décision et ne remplace ni l’observation du travail réel, ni la participation des salariés, ni les conseils des acteurs de prévention.</span></label>
+          </div>
+          <div class="quiz-nav onboard-nav"><button class="btn btn-light" id="onboard-prev" type="button">← Retour</button><span class="field-note" id="onboard-note">Étape 1 sur 4</span><button class="btn btn-primary" id="onboard-next" type="button">Continuer <span class="arrow">→</span></button></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- DASHBOARD -->
+    <main class="app-main appview is-active" id="app-dashboard" data-name="dashboard">
+      <div class="app-header"><div><p class="eyebrow">Pilotage prévention</p><h1 id="dashboard-title">Tableau de bord</h1><p class="sub" id="dashboard-subtitle"></p></div><div class="header-actions"><button class="btn btn-light btn-sm" data-appgoto="versions">Exporter / archiver</button><button class="btn btn-primary btn-sm" id="dashboard-primary">Reprendre l’évaluation</button></div></div>
+      <div class="kpi-grid" id="dashboard-kpis"></div>
+      <div class="dash-grid operational-grid">
+        <div class="dash-col">
+          <section class="card" id="dashboard-progress-card"></section>
+          <section class="card"><div class="card-top"><div><h2>Priorités à traiter</h2><p class="sub">Risques élevés non encore couverts par une action satisfaisante.</p></div><button class="text-button" data-appgoto="risks">Voir le registre</button></div><div id="dashboard-priorities" class="stack"></div></section>
+          <section class="card"><div class="card-top"><div><h2>Plan d’actions</h2><p class="sub">Prochaines échéances et actions à vérifier.</p></div><button class="text-button" data-appgoto="actions">Piloter</button></div><div id="dashboard-actions" class="stack"></div></section>
+        </div>
+        <div class="dash-col">
+          <section class="card" id="dashboard-compliance"></section>
+          <section class="card"><div class="card-top"><div><h2>Changements à intégrer</h2><p class="sub">Événements susceptibles de déclencher une mise à jour.</p></div><button class="text-button" data-modal="event">+ Ajouter</button></div><div id="dashboard-events" class="stack"></div></section>
+          <section class="card ai-card"><span class="ai-label"><span class="pulse"></span>Moteur local contrôlé</span><h2>Ce que fait l’assistant</h2><p>Il transforme les réponses en risques structurés, applique une cotation explicite et rattache des mesures sourcées. Il ne valide rien à votre place.</p><button class="btn btn-light btn-sm" data-modal="ai-info">Voir la traçabilité</button></section>
+        </div>
+      </div>
+    </main>
+
+    <!-- COMPANY -->
+    <main class="app-main appview" id="app-company" data-name="company" hidden>
+      <div class="app-header"><div><p class="eyebrow">Organisation</p><h1>Entreprise et unités de travail</h1><p class="sub">Décrivez le cadre, les activités et les personnes qui contribuent à l’évaluation.</p></div><button class="btn btn-primary btn-sm" id="save-company">Enregistrer les informations</button></div>
+      <div class="two-col-layout">
+        <section class="card">
+          <div class="card-top"><div><h2>Établissement</h2><p class="sub">Informations utilisées dans le DUERP et les rappels.</p></div><span class="mini-tag" id="company-program-label"></span></div>
+          <div class="form-grid" id="company-form">
+            <div class="field"><label for="company-name">Raison sociale *</label><input id="company-name" data-company="name"></div>
+            <div class="field"><label for="company-siret">SIRET</label><input id="company-siret" data-company="siret" inputmode="numeric" maxlength="14" pattern="[0-9]{14}" aria-describedby="company-siret-error"><small class="field-error" id="company-siret-error"></small></div>
+            <div class="field full"><label for="company-sector">Pack métier</label><select id="company-sector" data-company="sectorId"></select><small class="field-help">Changer de pack ne supprime pas vos unités. Vous pourrez ajouter les unités suggérées.</small></div>
+            <div class="field"><label for="company-employees">Effectif</label><input id="company-employees" data-company="employees" type="number" min="1" max="249"></div>
+            <div class="field"><label for="company-naf">Code NAF</label><input id="company-naf" data-company="naf"></div>
+            <div class="field full"><label for="company-address">Adresse</label><input id="company-address" data-company="address"></div>
+            <div class="field"><label for="company-contact">Pilote</label><input id="company-contact" data-company="contactName"></div>
+            <div class="field"><label for="company-role">Fonction</label><input id="company-role" data-company="contactRole"></div>
+            <div class="field"><label for="company-email">E-mail</label><input id="company-email" data-company="email" type="email" aria-describedby="company-email-error"><small class="field-error" id="company-email-error"></small></div>
+            <div class="field"><label for="company-spst">SPST</label><input id="company-spst" data-company="spst"></div>
+            <div class="field"><label for="company-cse">CSE</label><select id="company-cse" data-company="cse"><option value="no">Non</option><option value="yes">Oui</option><option value="unknown">À vérifier</option></select></div>
+            <div class="field"><label for="company-last-review">Dernière évaluation</label><input id="company-last-review" data-company="lastReviewDate" type="date"></div>
+          </div>
+        </section>
+        <aside class="stack">
+          <section class="card"><div class="card-top"><div><h2>Participants</h2><p class="sub">Invitations simulées dans ce MVP local.</p></div><button class="text-button" data-modal="collaborator">+ Inviter</button></div><div id="collaborator-list" class="stack"></div></section>
+          <section class="card"><div class="card-top"><h2>Règles applicables</h2></div><div id="company-rules" class="stack"></div></section>
+        </aside>
+      </div>
+      <section class="section-block"><div class="section-block-head"><div><p class="eyebrow">Cartographie du travail</p><h2>Unités de travail</h2><p>Décrivez les lieux, tâches et effectifs concernés. Chaque unité reçoit son propre parcours.</p></div><div class="header-actions"><button class="btn btn-light btn-sm" id="suggest-units">Ajouter les unités suggérées</button><button class="btn btn-primary btn-sm" data-modal="unit">+ Nouvelle unité</button></div></div><div class="unit-grid" id="company-unit-grid"></div></section>
+    </main>
+
+    <!-- EVALUATION HUB -->
+    <main class="app-main appview" id="app-evaluation" data-name="evaluation" hidden>
+      <div class="app-header"><div><p class="eyebrow">Évaluation guidée</p><h1>Observer, questionner, valider</h1><p class="sub">Chaque réponse crée ou met à jour un risque structuré. Les réponses « je ne sais pas » restent visibles comme incertitudes.</p></div><button class="btn btn-light btn-sm" data-modal="method">Méthode de cotation</button></div>
+      <section class="card evaluation-overview" id="evaluation-overview"></section>
+      <div class="unit-grid evaluation-grid" id="evaluation-unit-grid"></div>
+    </main>
+
+    <!-- QUIZ -->
+    <main class="app-main appview" id="app-quiz" data-name="quiz" hidden>
+      <div class="quiz-layout">
+        <aside class="quiz-side"><button class="link-back" data-appgoto="evaluation">← Toutes les unités</button><nav class="vertical-stepper" id="quiz-unit-stepper" aria-label="Unités de travail"></nav><div class="card compact-card"><h3>Conseil terrain</h3><p>Répondez après observation et échange avec les personnes concernées. Notez les écarts entre procédure et travail réel.</p></div></aside>
+        <section class="quiz-main">
+          <div class="quiz-progress-row"><div><p class="q-label" id="quiz-unit-label"></p><h1 id="quiz-title"></h1></div><span class="mini-tag" id="quiz-counter"></span></div>
+          <div class="progress"><i id="quiz-progress-bar"></i></div>
+          <article class="quiz-card operational-quiz">
+            <p class="q-label" id="quiz-question-category">Situation de travail</p>
+            <h2 id="quiz-question-title"></h2>
+            <p class="q-help" id="quiz-question-help"></p>
+            <div class="choice-list" id="quiz-options"></div>
+            <div class="field full question-note"><label for="quiz-note">Observation ou précision terrain</label><textarea id="quiz-note" placeholder="Ex. la tâche est réalisée deux fois par jour, sans chariot disponible…"></textarea></div>
+            <div class="source-note" id="quiz-source-note"></div>
+            <div class="quiz-nav"><button class="btn btn-light" id="quiz-prev">← Question précédente</button><span class="field-note" id="quiz-required-note">Choisissez une réponse pour continuer</span><button class="btn btn-primary" id="quiz-next">Valider et continuer <span class="arrow">→</span></button></div>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <!-- RISKS -->
+    <main class="app-main appview" id="app-risks" data-name="risks" hidden>
+      <div class="app-header"><div><p class="eyebrow">Registre structuré</p><h1>Risques professionnels</h1><p class="sub">Chaque fiche relie une situation, une cotation, des mesures existantes, une source et une validation humaine.</p></div><div class="header-actions"><button class="btn btn-light btn-sm" id="export-risks">Exporter CSV</button><button class="btn btn-primary btn-sm" data-modal="risk">+ Ajouter un risque</button></div></div>
+      <div class="toolbar card"><div class="search-field"><span>⌕</span><input id="risk-search" placeholder="Rechercher un danger, une unité, une mesure…"></div><select id="risk-level-filter" aria-label="Filtrer par niveau"><option value="all">Tous les niveaux</option><option value="high">Élevés</option><option value="mid">Modérés</option><option value="low">Maîtrisés</option><option value="unknown">À préciser</option></select><select id="risk-validation-filter" aria-label="Filtrer par validation"><option value="all">Toutes validations</option><option value="validated">Validés</option><option value="to-review">À relire</option></select></div>
+      <div class="risk-summary-strip" id="risk-summary-strip"></div>
+      <div class="risk-register" id="risk-register"></div>
+    </main>
+
+    <!-- ACTIONS -->
+    <main class="app-main appview" id="app-actions" data-name="actions" hidden>
+      <div class="app-header"><div><p class="eyebrow">Prévention opérationnelle</p><h1 id="actions-title">Plan d’actions</h1><p class="sub">Une action n’est terminée qu’après mise en œuvre et vérification de son efficacité.</p></div><div class="header-actions"><button class="btn btn-light btn-sm" id="export-actions">Exporter CSV</button><button class="btn btn-primary btn-sm" data-modal="action">+ Ajouter une action</button></div></div>
+      <div class="kpi-grid compact" id="action-kpis"></div>
+      <div class="toolbar card"><div class="search-field"><span>⌕</span><input id="action-search" placeholder="Rechercher une action, un responsable…"></div><select id="action-status-filter"><option value="all">Tous les statuts</option><option>À étudier</option><option>Décidée</option><option>Planifiée</option><option>Mise en œuvre</option><option>Efficacité à vérifier</option><option>Vérifiée efficace</option><option>À revoir</option></select><select id="action-priority-filter"><option value="all">Toutes priorités</option><option value="high">Haute</option><option value="mid">Modérée</option><option value="low">Amélioration</option></select></div>
+      <div id="action-list" class="action-board"></div>
+    </main>
+
+    <!-- REVIEW -->
+    <main class="app-main appview" id="app-review" data-name="review" hidden>
+      <div class="app-header"><div><p class="eyebrow">Contrôle avant édition</p><h1>Revue finale et validation employeur</h1><p class="sub">Prévio bloque la création d’une version lorsqu’une information essentielle manque ou qu’un risque élevé reste sans action.</p></div><button class="btn btn-light btn-sm" data-modal="method">Voir les règles de contrôle</button></div>
+      <div class="review-layout">
+        <section class="card"><div class="card-top"><div><h2>Contrôles de cohérence</h2><p class="sub">Calculés à partir de l’état réel de votre démarche.</p></div><span class="badge" id="review-status-badge"></span></div><div id="review-checks" class="review-checks"></div></section>
+        <aside class="stack">
+          <section class="card"><h2>Participation et consultation</h2><div class="check-form" id="review-participation">
+            <label><input type="checkbox" data-review="employeesInvolved"><span>Les salariés concernés ont été associés ou leurs observations ont été recueillies.</span></label>
+            <label id="review-cse-row"><input type="checkbox" data-review="cseConsulted"><span>Le CSE a été associé et consulté sur la mise à jour.</span></label>
+            <label><input type="checkbox" data-review="spstShared"><span>La version sera tenue à disposition du SPST et des personnes habilitées.</span></label>
+          </div></section>
+          <section class="card"><h2>Déclaration de l’employeur</h2><div class="field"><label for="review-author">Nom du validateur</label><input id="review-author" data-review-text="author"></div><label class="declaration-box"><input type="checkbox" data-review="employerDeclaration"><span>Je confirme avoir relu les unités, risques, cotations, mesures existantes et actions. Je valide cette version sous ma responsabilité.</span></label><button class="btn btn-primary" id="create-version-from-review" style="width:100%;justify-content:center;margin-top:1rem">Créer une version archivée</button><p class="field-note" id="version-block-note"></p></section>
+        </aside>
+      </div>
+    </main>
+
+    <!-- VERSIONS & FOLLOW-UP -->
+    <main class="app-main appview" id="app-versions" data-name="versions" hidden>
+      <div class="app-header"><div><p class="eyebrow">Traçabilité</p><h1>Versions, archives et changements</h1><p class="sub">Chaque version archivée contient un instantané immuable, un motif, un auteur et une empreinte.</p></div><div class="header-actions"><button class="btn btn-light btn-sm" id="print-current">Imprimer le DUERP</button><button class="btn btn-primary btn-sm" id="download-backup">Télécharger la sauvegarde</button></div></div>
+      <div class="two-col-layout versions-layout">
+        <section class="card"><div class="card-top"><div><h2>Historique des versions</h2><p class="sub">Les versions archivées ne sont pas modifiées lorsque le brouillon évolue.</p></div><span class="mini-tag" id="version-count"></span></div><div id="version-list" class="version-list"></div></section>
+        <aside class="stack">
+          <section class="card"><div class="card-top"><div><h2>Journal des changements</h2><p class="sub">Équipements, organisation, accident, information nouvelle…</p></div><button class="text-button" data-modal="event">+ Événement</button></div><div id="event-list" class="timeline"></div></section>
+          <section class="card"><h2>Portabilité des données</h2><p class="sub">Le fichier JSON contient l’intégralité du brouillon et des archives. Il peut être réimporté sur cet appareil.</p><div class="stack" style="margin-top:1rem"><button class="btn btn-light btn-sm" id="import-backup-button">Importer une sauvegarde</button><input id="import-backup" type="file" accept="application/json" hidden><button class="btn btn-light btn-sm" id="export-all-csv">Exporter risques + actions en CSV</button></div></section>
+          <section class="alert alert-info"><span><strong>Conservation.</strong> Les versions successives du DUERP doivent rester disponibles pendant 40 ans. Cette démonstration locale ne constitue pas un coffre-fort d’archivage de production.</span></section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- DOCUMENT D’IMPRESSION -->
+<section id="print-document" class="print-document" aria-hidden="true"></section>
+
+<!-- MODALES -->
+<div class="modal-backdrop" id="modal-unit" role="dialog" aria-modal="true" aria-labelledby="modal-unit-title" aria-hidden="true">
+  <section class="modal"><header class="modal-head"><div><h2 id="modal-unit-title">Ajouter une unité de travail</h2><p>Décrivez un groupe homogène de situations d’exposition.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="unit-form"><input id="unit-edit-id" type="hidden"><div class="form-grid"><div class="field full"><label for="unit-name">Nom *</label><input id="unit-name" required></div><div class="field"><label for="unit-people">Personnes concernées</label><input id="unit-people" type="number" min="1" value="1"></div><div class="field"><label for="unit-place">Lieu principal</label><input id="unit-place"></div><div class="field full"><label for="unit-tasks">Activités principales</label><textarea id="unit-tasks"></textarea></div><div class="field full"><label for="unit-question-set">Parcours de questions</label><select id="unit-question-set"><option value="sector">Questions suggérées par le secteur</option><option value="generic">Parcours générique</option></select></div></div><div class="form-actions"><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Enregistrer l’unité</button></div></form></div></section>
+</div>
+
+<div class="modal-backdrop" id="modal-risk" role="dialog" aria-modal="true" aria-labelledby="modal-risk-title" aria-hidden="true">
+  <section class="modal modal-wide"><header class="modal-head"><div><h2 id="modal-risk-title">Fiche de risque</h2><p>La cotation est recalculée à partir de la gravité, de l’exposition et de la maîtrise.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="risk-form"><input id="risk-id" type="hidden"><div class="form-grid"><div class="field full"><label for="risk-title">Risque *</label><input id="risk-title" required></div><div class="field"><label for="risk-unit">Unité *</label><select id="risk-unit" required></select></div><div class="field"><label for="risk-exposed">Personnes / fonctions exposées</label><input id="risk-exposed"></div><div class="field"><label for="risk-danger">Danger</label><input id="risk-danger"></div><div class="field"><label for="risk-circumstances">Circonstances d’exposition</label><input id="risk-circumstances"></div><div class="field full"><label for="risk-situation">Situation de travail</label><textarea id="risk-situation"></textarea></div><div class="field"><label for="risk-severity">Gravité potentielle</label><select id="risk-severity"><option value="1">1 — Mineure</option><option value="2">2 — Modérée</option><option value="3">3 — Grave</option><option value="4">4 — Très grave</option></select></div><div class="field"><label for="risk-frequency">Exposition</label><select id="risk-frequency"><option value="1">1 — Rare</option><option value="2">2 — Occasionnelle</option><option value="3">3 — Fréquente</option><option value="4">4 — Continue</option></select></div><div class="field"><label for="risk-control">Niveau de maîtrise</label><select id="risk-control"><option value="1">1 — Maîtrise forte</option><option value="2">2 — Maîtrise partielle</option><option value="3">3 — Maîtrise faible</option><option value="4">4 — Absence de maîtrise</option></select></div><div class="field"><label>Criticité calculée</label><output id="risk-score-preview" class="score-preview"></output></div><div class="field full"><label for="risk-existing">Mesures existantes</label><textarea id="risk-existing"></textarea></div><div class="field full"><label for="risk-prevention">Mesures complémentaires proposées</label><textarea id="risk-prevention"></textarea></div><div class="field"><label for="risk-confidence">Niveau de confiance</label><select id="risk-confidence"><option value="high">Élevé</option><option value="medium">Moyen</option><option value="low">Faible / information manquante</option></select></div><div class="field"><label for="risk-validation">Validation humaine</label><select id="risk-validation"><option value="to-review">À relire</option><option value="validated">Validé</option></select></div><div class="field full"><label for="risk-source-label">Source ou référentiel</label><input id="risk-source-label"></div><div class="field full"><label for="risk-source-url">Lien source</label><input id="risk-source-url" type="url"></div></div><div class="formula-box" id="risk-formula-box"></div><div class="form-actions"><button type="button" class="btn btn-light danger-button" id="delete-risk">Supprimer</button><span class="form-spacer"></span><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Enregistrer le risque</button></div></form></div></section>
+</div>
+
+<div class="modal-backdrop" id="modal-action" role="dialog" aria-modal="true" aria-labelledby="modal-action-title" aria-hidden="true">
+  <section class="modal modal-wide"><header class="modal-head"><div><h2 id="modal-action-title">Action de prévention</h2><p>Reliez l’action à un risque, un responsable, un indicateur et une preuve.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="action-form"><input id="action-id" type="hidden"><div class="form-grid"><div class="field full"><label for="action-title">Action *</label><input id="action-title" required></div><div class="field"><label for="action-risk">Risque associé</label><select id="action-risk"></select></div><div class="field"><label for="action-unit">Unité</label><select id="action-unit"></select></div><div class="field full"><label for="action-objective">Objectif de prévention</label><input id="action-objective"></div><div class="field full"><label for="action-description">Conditions d’exécution</label><textarea id="action-description"></textarea></div><div class="field"><label for="action-priority">Priorité</label><select id="action-priority"><option value="high">Haute</option><option value="mid">Modérée</option><option value="low">Amélioration</option></select></div><div class="field"><label for="action-status">Statut</label><select id="action-status"><option>À étudier</option><option>Décidée</option><option>Planifiée</option><option>Mise en œuvre</option><option>Efficacité à vérifier</option><option>Vérifiée efficace</option><option>À revoir</option></select></div><div class="field"><label for="action-owner">Responsable</label><input id="action-owner"></div><div class="field"><label for="action-deadline">Échéance</label><input id="action-deadline" type="date"></div><div class="field"><label for="action-budget">Budget estimé (€)</label><input id="action-budget" type="number" min="0" step="1"></div><div class="field"><label for="action-resource">Ressource mobilisée</label><input id="action-resource" placeholder="Temps interne, fournisseur, SPST…"></div><div class="field full"><label for="action-indicator">Indicateur de résultat</label><input id="action-indicator"></div><div class="field full"><label for="action-evidence">Preuve ou lien de réalisation</label><input id="action-evidence"></div><div class="field"><label for="action-effectiveness">Efficacité vérifiée</label><select id="action-effectiveness"><option value="not-checked">Non vérifiée</option><option value="effective">Efficace</option><option value="partial">Partielle</option><option value="ineffective">Insuffisante</option></select></div><div class="field"><label for="action-verified-at">Date de vérification</label><input id="action-verified-at" type="date"></div></div><div class="form-actions"><button type="button" class="btn btn-light danger-button" id="delete-action">Supprimer</button><span class="form-spacer"></span><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Enregistrer l’action</button></div></form></div></section>
+</div>
+
+<div class="modal-backdrop" id="modal-event" role="dialog" aria-modal="true" aria-labelledby="modal-event-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-event-title">Ajouter un changement</h2><p>Un événement peut déclencher une mise à jour de l’évaluation.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="event-form"><div class="form-grid"><div class="field"><label for="event-type">Type</label><select id="event-type"><option>Nouvel équipement</option><option>Nouvelle activité</option><option>Réaménagement</option><option>Accident ou presque-accident</option><option>Information nouvelle sur un risque</option><option>Changement d’horaires ou d’organisation</option><option>Nouvel embauché / effectif</option><option>Autre</option></select></div><div class="field"><label for="event-date">Date</label><input id="event-date" type="date"></div><div class="field"><label for="event-unit">Unité concernée</label><select id="event-unit"></select></div><div class="field"><label for="event-status">Traitement</label><select id="event-status"><option value="open">À intégrer</option><option value="reviewed">Analysé</option><option value="closed">Clôturé</option></select></div><div class="field full"><label for="event-description">Description *</label><textarea id="event-description" required></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Ajouter au journal</button></div></form></div></section></div>
+
+<div class="modal-backdrop" id="modal-collaborator" role="dialog" aria-modal="true" aria-labelledby="modal-collaborator-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-collaborator-title">Ajouter un participant</h2><p>Le MVP enregistre l’invitation sans envoyer d’e-mail.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="collaborator-form"><div class="form-grid"><div class="field"><label for="collaborator-name">Nom *</label><input id="collaborator-name" required></div><div class="field"><label for="collaborator-email">E-mail</label><input id="collaborator-email" type="email"></div><div class="field"><label for="collaborator-role">Rôle</label><select id="collaborator-role"><option>Salarié contributeur</option><option>Membre du CSE</option><option>Préventeur / IPRP</option><option>SPST</option><option>Consultant</option><option>Administrateur</option></select></div><div class="field"><label for="collaborator-scope">Droit</label><select id="collaborator-scope"><option value="comment">Commenter</option><option value="contribute">Contribuer</option><option value="validate">Valider</option><option value="admin">Administrer</option></select></div></div><div class="form-actions"><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Ajouter</button></div></form></div></section></div>
+
+<div class="modal-backdrop" id="modal-version" role="dialog" aria-modal="true" aria-labelledby="modal-version-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-version-title">Archiver une nouvelle version</h2><p>L’instantané sera conservé indépendamment du brouillon.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="version-form"><div class="form-grid"><div class="field"><label for="version-author">Auteur *</label><input id="version-author" required></div><div class="field"><label for="version-date">Date</label><input id="version-date" type="date"></div><div class="field full"><label for="version-reason">Motif de la mise à jour *</label><textarea id="version-reason" required placeholder="Évaluation initiale, nouvel équipement, réorganisation…"></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Créer l’archive</button></div></form></div></section></div>
+
+<div class="modal-backdrop" id="modal-method" role="dialog" aria-modal="true" aria-labelledby="modal-method-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-method-title">Méthode de cotation</h2><p>Une aide à prioriser, jamais une vérité mathématique.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><div class="method-grid"><div><span class="method-num">G</span><h3>Gravité</h3><p>De 1, conséquence mineure, à 4, conséquence très grave.</p></div><div><span class="method-num">E</span><h3>Exposition</h3><p>De 1, rare, à 4, continue ou très fréquente.</p></div><div><span class="method-num">M</span><h3>Maîtrise</h3><p>Un coefficient de 0,5 à 1,25 reflète la robustesse des mesures existantes.</p></div></div><div class="formula-box"><strong>Criticité brute = G × E</strong><br>Criticité résiduelle = criticité brute × coefficient de maîtrise.<br><small>Faible ≤ 4 · Modérée &gt; 4 à 8 · Élevée &gt; 8. Les seuils sont paramétrables dans une version serveur.</small></div><p>Lorsque l’information manque, Prévio conserve la fiche « à préciser » plutôt que d’inventer un score définitif.</p></div></section></div>
+
+<div class="modal-backdrop" id="modal-ai-info" role="dialog" aria-modal="true" aria-labelledby="modal-ai-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-ai-title">Traçabilité de l’assistant</h2><p>Le MVP n’envoie aucune réponse vers un modèle externe.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><ul class="check-stack"><li><span class="check-dot">1</span><span><strong>Entrée.</strong> Réponse, note terrain, unité et référentiel sectoriel.</span></li><li><span class="check-dot">2</span><span><strong>Transformation.</strong> Règles déterministes embarquées dans <code>data.js</code>.</span></li><li><span class="check-dot">3</span><span><strong>Sortie.</strong> Fiche de risque proposée, source, confiance et mesures suggérées.</span></li><li><span class="check-dot">4</span><span><strong>Décision.</strong> L’utilisateur modifie, valide ou rejette la proposition.</span></li></ul><div class="alert alert-info" style="margin-top:1rem"><span>Pour brancher un LLM réel, utilisez l’adaptateur serveur décrit dans le README. Ne placez jamais une clé d’API dans le navigateur.</span></div></div></section></div>
+
+<div class="modal-backdrop" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="modal-help-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-help-title">Mener une évaluation utile</h2><p>Les bons réflexes avant de cliquer.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><ul class="check-stack"><li><span class="check-dot">1</span><span><strong>Observer le travail réel.</strong> Incluez les aléas, pics, nettoyages et opérations inhabituelles.</span></li><li><span class="check-dot">2</span><span><strong>Associer les salariés.</strong> Ils connaissent les incidents, difficultés et adaptations.</span></li><li><span class="check-dot">3</span><span><strong>Agir à la source.</strong> Privilégiez suppression, substitution, organisation et protections collectives.</span></li><li><span class="check-dot">4</span><span><strong>Savoir s’arrêter.</strong> Une exposition complexe ou incertaine appelle une mesure ou un professionnel compétent.</span></li></ul></div></section></div>
+
+<div class="modal-backdrop" id="modal-settings" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-settings-title">Paramètres et données</h2><p>Gestion locale de la démonstration.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><div class="stack"><button class="btn btn-light" id="settings-download">Télécharger toutes les données</button><button class="btn btn-light" id="settings-import">Importer une sauvegarde</button><button class="btn btn-light danger-button" id="settings-reset">Réinitialiser la démonstration</button></div><div class="alert alert-info" style="margin-top:1rem"><span>En production, remplacez cette persistance locale par une base de données, des comptes, un journal d’audit, des sauvegardes et un stockage d’archives chiffré.</span></div></div></section></div>
+
+<div class="modal-backdrop" id="modal-legal" role="dialog" aria-modal="true" aria-labelledby="modal-legal-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-legal-title">Mentions légales</h2><p>Informations à compléter avant toute mise en ligne publique.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><div class="stack text-stack"><p><strong>Éditeur.</strong> Raison sociale, forme juridique, adresse, capital, SIREN/RCS et coordonnées à renseigner.</p><p><strong>Directeur de la publication.</strong> À renseigner.</p><p><strong>Hébergeur.</strong> À renseigner selon l’infrastructure de production.</p><p><strong>Nature du service.</strong> Prévio est un outil d’aide à la structuration de l’évaluation des risques. Il ne remplace ni l’observation du travail réel, ni la participation des travailleurs, ni l’avis des acteurs de prévention, ni un conseil juridique.</p></div></div></section></div>
+
+<div class="modal-backdrop" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-privacy-title">Confidentialité du prototype</h2><p>Fonctionnement de cette version locale.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><div class="stack text-stack"><p>Cette démonstration enregistre les données dans le stockage local du navigateur lorsqu’il est disponible. Elle n’envoie pas les réponses vers un serveur ou un modèle d’IA externe.</p><p>Les données peuvent être exportées ou supprimées depuis les paramètres. Vider les données du navigateur peut également les effacer.</p><p>Avant la mise en production, il faudra publier une politique de confidentialité complète, conclure les contrats de sous-traitance nécessaires, définir les durées de conservation et documenter les mesures de sécurité.</p></div></div></section></div>
+
+<div class="modal-backdrop" id="modal-contact" role="dialog" aria-modal="true" aria-labelledby="modal-contact-title" aria-hidden="true"><section class="modal"><header class="modal-head"><div><h2 id="modal-contact-title">Contacter Prévio</h2><p>Formulaire de démonstration, sans envoi réseau.</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></header><div class="modal-body"><form id="contact-form"><div class="form-grid"><div class="field"><label for="contact-name">Nom *</label><input id="contact-name" required></div><div class="field"><label for="contact-email">E-mail *</label><input id="contact-email" type="email" required></div><div class="field full"><label for="contact-message">Message *</label><textarea id="contact-message" required></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-light" data-close-modal>Annuler</button><button type="submit" class="btn btn-primary">Préparer le message</button></div><p class="field-help" style="margin-top:.8rem">Dans cette version, le contenu est copié dans le presse-papiers afin de tester le parcours sans collecter de données.</p></form></div></section></div>
+
+<div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+<script src="data.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>
