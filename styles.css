@@ -259,8 +259,11 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:700;let
 .section-head h2{font-size:var(--fs-h1);letter-spacing:-.025em}
 .section-head p{margin-top:.9rem;color:var(--text-soft);font-size:1.05rem}
 
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+/* Le contenu reste visible par défaut. L'animation n'est activée qu'après
+   initialisation réussie de l'observateur JavaScript. */
+.reveal{opacity:1;transform:none}
+.reveal-ready .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
+.reveal-ready .reveal.in{opacity:1;transform:none}
 
 /* Étapes */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}

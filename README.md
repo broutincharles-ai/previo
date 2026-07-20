@@ -114,3 +114,7 @@ previo-mvp-operationnel/
 ├── README.md
 └── ARCHITECTURE-PRODUCTION.md
 ```
+
+## Correction de l’affichage des sections de la landing page
+
+La version corrigée garantit que les sections « Fonctionnement », « Bénéfices » et « IA & données » restent visibles même si JavaScript ou `IntersectionObserver` est indisponible. L’animation d’apparition n’est activée qu’après initialisation réussie du script.
